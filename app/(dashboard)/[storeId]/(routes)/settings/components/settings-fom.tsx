@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import * as z from "zod";
 import { Store } from "@prisma/client";
@@ -22,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { AlertModal } from "@/components/modals/alert-modal";
+import { ApiAlert } from "@/components/ui/api-alert";
 
 interface SettingsFomProps {
   initialData: Store;
@@ -33,7 +35,7 @@ const formSchema = z.object({
 
 type SettingsFomValues = z.infer<typeof formSchema>;
 
-export const SettingsFom: React.FC<SettingsFomProps> = ({ initialData }) => {
+export const SettingsForm: React.FC<SettingsFomProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
@@ -124,6 +126,14 @@ export const SettingsFom: React.FC<SettingsFomProps> = ({ initialData }) => {
           </Button>
         </form>
       </Form>
+
+      <Separator />
+
+      <ApiAlert
+        title="NEXT_PUBLIC_API_URL"
+        description={`${origin}/api/${params.storeId}`}
+        variant="public"
+      />
     </>
   );
 };
