@@ -23,10 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { AlertModal } from "@/components/modals/alert-modal";
-import { ApiAlert } from "@/components/ui/api-alert";
-import { useOrigine } from "@/hooks/use-origine";
 import ImageUpload from "@/components/ui/image-upload";
-import { url } from "inspector";
 
 const formSchema = z.object({
   label: z.string().min(1),
