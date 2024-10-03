@@ -84,6 +84,7 @@ export const CategoryForm: React.FC<CategoryFomProps> = ({
       toast.error("Something went wrong.");
     } finally {
       setLoading(false);
+      router.refresh();
     }
   };
 
@@ -102,6 +103,8 @@ export const CategoryForm: React.FC<CategoryFomProps> = ({
       );
     } finally {
       setLoading(false);
+      setOpen(false);
+      router.refresh();
     }
   };
 
