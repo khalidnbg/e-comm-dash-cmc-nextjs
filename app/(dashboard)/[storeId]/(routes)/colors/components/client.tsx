@@ -32,6 +32,7 @@ export const ColorsClient: React.FC<ColorsClientProps> = ({ data }) => {
           Add New
         </Button>
       </div>
+
       <Separator />
 
       <DataTable searchKey="name" columns={columns} data={data} />

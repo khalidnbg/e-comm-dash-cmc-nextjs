@@ -4,29 +4,29 @@ import { NextResponse } from "next/server"
 
 export async function GET(
 	req: Request,
-	{params } : {params: { sizeId: string}}
+	{params } : {params: { colorId: string}}
 ) {
 	try {
-	  if (!params.sizeId) {
+	  if (!params.colorId) {
 		return new NextResponse("Size id is required", { status: 400 });
 	  }
 
-	  const size = await db.size.findUnique({
+	  const color = await db.color.findUnique({
 		where: {
-			id: params.sizeId,
+			id: params.colorId,
 		},
 	});
 
-	return NextResponse.json(size);
+	return NextResponse.json(color);
 	} catch (error) {
-	  console.log("[GET_SIZE]", error)
+	  console.log("[GET_COLOR]", error)
 	  return new NextResponse("Internal error", { status: 500 });
 	}
 }
 
 export async function PATCH(
 	req: Request,
-	{params } : {params: { storeId: string, sizeId : string }}
+	{params } : {params: { storeId: string, colorId : string }}
 ) {
 	try {
       const {userId} = auth();
@@ -46,8 +46,8 @@ export async function PATCH(
 		return new NextResponse("Value is required", { status: 400 });
 	  }
 
-	  if (!params.sizeId) {
-		return new NextResponse("sizeId is required", { status: 400 });
+	  if (!params.colorId) {
+		return new NextResponse("colorId is required", { status: 400 });
 	  }
 
 	  const storeByUserId = await db.store.findFirst({
@@ -61,9 +61,9 @@ export async function PATCH(
 		return new NextResponse("Unauthorized", { status: 403 });
 	  }
 
-	  const size = await db.size.updateMany({
+	  const color = await db.color.updateMany({
 		where: {
-			id: params.sizeId,
+			id: params.colorId,
 		},
 		data: {
 			name,
@@ -71,16 +71,16 @@ export async function PATCH(
 		}
 	});
 
-	return NextResponse.json(size);
+	return NextResponse.json(color);
 	} catch (error) {
-	  console.log("[PATCH_SiZE]", error)
+	  console.log("[PATCH_COLOR]", error)
 	  return new NextResponse("Internal error", { status: 500 });
 	}
 }
 
 export async function DELETE(
 	req: Request,
-	{params } : {params: {storeId : string, sizeId: string}}
+	{params } : {params: {storeId : string, colorId: string}}
 ) {
 	try {
       const {userId} = auth();
@@ -89,8 +89,8 @@ export async function DELETE(
 		return new NextResponse("Unauthorized", { status: 401 });
 	  }
 
-	  if (!params.sizeId) {
-		return new NextResponse("SizeId is required", { status: 400 });
+	  if (!params.colorId) {
+		return new NextResponse("colorId is required", { status: 400 });
 	  }
 
 	  const storeByUserId = await db.store.findFirst({
@@ -104,15 +104,15 @@ export async function DELETE(
 		return new NextResponse("Unauthorized", { status: 403 });
 	  }
 
-	  const size = await db.size.deleteMany({
+	  const color = await db.color.deleteMany({
 		where: {
-			id: params.sizeId,
+			id: params.colorId,
 		},
 	});
 
-	return NextResponse.json(size);
+	return NextResponse.json(color);
 	} catch (error) {
-	  console.log("[DELETE_SIZE]", error)
+	  console.log("[DELETE_COLOR]", error)
 	  return new NextResponse("Internal error", { status: 500 });
 	}
 }
