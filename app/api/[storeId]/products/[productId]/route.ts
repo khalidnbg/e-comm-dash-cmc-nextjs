@@ -4,50 +4,72 @@ import { NextResponse } from "next/server"
 
 export async function GET(
 	req: Request,
-	{params } : {params: { billboardId: string}}
+	{params } : {params: { productId: string}}
 ) {
 	try {
-	  if (!params.billboardId) {
-		return new NextResponse("Billboard is required", { status: 400 });
+	  if (!params.productId) {
+		return new NextResponse("Product is required", { status: 400 });
 	  }
 
-	  const billboard = await db.billboard.findUnique({
+	  const product = await db.product.findUnique({
 		where: {
-			id: params.billboardId,
+			id: params.productId,
 		},
+		include: {
+			images: true,
+			category: true,
+			color: true,
+			size: true
+		}, 
 	});
 
-	return NextResponse.json(billboard);
+	return NextResponse.json(product);
 	} catch (error) {
-	  console.log("[GET_Billboard]", error)
+	  console.log("[GET_PRODUCT]", error)
 	  return new NextResponse("Internal error", { status: 500 });
 	}
 }
 
 export async function PATCH(
 	req: Request,
-	{params } : {params: { storeId: string, billboardId : string }}
+	{params } : {params: { storeId: string, productId : string }}
 ) {
 	try {
       const {userId} = auth();
 	  const body = await req.json();
 
-	  const { label, imageUrl } = body
+	  const { name, price, categoryId, colorId, sizeId, images, isFeatured, isArchived  } = body;
 
 	  if (!userId) {
-		return new NextResponse("Unauthorized", { status: 401 });
+		return new NextResponse("Unauthenticated", { status: 401 });
 	  }
 
-	  if (!label) {
-		return new NextResponse("Label is required", { status: 400 });
+	  if (!name) {
+		return new NextResponse("Name is required", { status: 400 });
 	  }
 
-	  if (!imageUrl) {
-		return new NextResponse("Image Url is required", { status: 400 });
+	  if (!images || !images.length) {
+		return new NextResponse("Images are required", { status: 400 });
 	  }
 
-	  if (!params.billboardId) {
-		return new NextResponse("Billboard is required", { status: 400 });
+	  if (!price) {
+		return new NextResponse("Price is required", { status: 400 });
+	  }
+
+	  if (!categoryId) {
+		return new NextResponse("Category Id is required", { status: 400 });
+	  }
+
+	  if (!sizeId) {
+		return new NextResponse("Size Id required", { status: 400 });
+	  }
+
+	  if (!colorId) {
+		return new NextResponse("Color Id is required", { status: 400 });
+	  }
+	
+	  if (!params.storeId) {
+		return new NextResponse("Store id is required", { status: 400 });	
 	  }
 
 	  const storeByUserId = await db.store.findFirst({
@@ -61,26 +83,50 @@ export async function PATCH(
 		return new NextResponse("Unauthorized", { status: 403 });
 	  }
 
-	  const billboard = await db.billboard.updateMany({
+	   await db.product.update({
 		where: {
-			id: params.billboardId,
+			id: params.productId,
 		},
 		data: {
-			label,
-			imageUrl
+			name,
+			price,
+			isFeatured, 
+			isArchived, 
+			categoryId,
+			sizeId,
+			colorId,
+
+			images: {
+				deleteMany: {}
+			}
 		}
 	});
 
-	return NextResponse.json(billboard);
+	const products = await db.product.update({
+		where: {
+			id: params.productId,
+		},
+		data: {
+			images: {
+				createMany: {
+					data: [
+						...images.map((image: {url: string}) => image)
+					]
+				}
+			}
+		}
+	})
+
+	return NextResponse.json(products);
 	} catch (error) {
-	  console.log("[PATCH_Billboard]", error)
+	  console.log("[PATCH_PRODUCT]", error)
 	  return new NextResponse("Internal error", { status: 500 });
 	}
 }
 
 export async function DELETE(
 	req: Request,
-	{params } : {params: {storeId : string, billboardId: string}}
+	{params } : {params: {storeId : string, productId: string}}
 ) {
 	try {
       const {userId} = auth();
@@ -89,8 +135,8 @@ export async function DELETE(
 		return new NextResponse("Unauthorized", { status: 401 });
 	  }
 
-	  if (!params.billboardId) {
-		return new NextResponse("Billboard is required", { status: 400 });
+	  if (!params.productId) {
+		return new NextResponse("Product Id is required", { status: 400 });
 	  }
 
 	  const storeByUserId = await db.store.findFirst({
@@ -104,15 +150,15 @@ export async function DELETE(
 		return new NextResponse("Unauthorized", { status: 403 });
 	  }
 
-	  const billboard = await db.billboard.deleteMany({
+	  const product = await db.product.deleteMany({
 		where: {
-			id: params.billboardId,
+			id: params.productId,
 		},
 	});
 
-	return NextResponse.json(billboard);
+	return NextResponse.json(product);
 	} catch (error) {
-	  console.log("[DELETE_Billboard]", error)
+	  console.log("[DELETE_PRODUCT]", error)
 	  return new NextResponse("Internal error", { status: 500 });
 	}
 }
