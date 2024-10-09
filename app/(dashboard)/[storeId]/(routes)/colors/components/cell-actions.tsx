@@ -40,6 +40,7 @@ export const CellActions: React.FC<CellInterfaceProps> = ({ data }) => {
       router.refresh();
       toast.success("Color deleted.");
     } catch (error) {
+      console.error("Failed to delete the color:", error);
       toast.error("Make sure to remove all products using this color first.");
     } finally {
       setLoading(false);

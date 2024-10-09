@@ -13,12 +13,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { BillboardColumn } from "./columns";
+import { OrderColumn } from "./columns";
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/components/modals/alert-modal";
 
 interface CellInterfaceProps {
-  data: BillboardColumn;
+  data: OrderColumn;
 }
 
 export const CellActions: React.FC<CellInterfaceProps> = ({ data }) => {
@@ -40,9 +40,8 @@ export const CellActions: React.FC<CellInterfaceProps> = ({ data }) => {
       router.refresh();
       toast.success("Billboard deleted.");
     } catch (error) {
-      toast.error(
-        "Make sure to remove all categories using this billboard first."
-      );
+      console.error("Failed to delete the order:", error);
+      toast.error("Make sure to remove all categories using this order first.");
     } finally {
       setLoading(false);
     }

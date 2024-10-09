@@ -109,6 +109,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       router.push(`/${params.storeId}/products`);
       toast.success(toastMessage);
     } catch (error) {
+      console.error("Failed to submit the form:", error);
       toast.error("Something went wrong.");
     } finally {
       setLoading(false);
@@ -123,6 +124,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       router.push(`/${params.storeId}/products`);
       toast.success("Product deleted.");
     } catch (error) {
+      console.error("Failed to delete the product:", error);
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
@@ -326,7 +328,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   <FormControl>
                     <Checkbox
                       checked={field.value}
-                      //@ts-ignore
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
@@ -349,7 +350,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   <FormControl>
                     <Checkbox
                       checked={field.value}
-                      //@ts-ignore
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>

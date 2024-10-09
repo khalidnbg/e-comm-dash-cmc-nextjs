@@ -23,7 +23,6 @@ import {
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { AlertModal } from "@/components/modals/alert-modal";
-import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -71,6 +70,7 @@ export const SizeForm: React.FC<SizeFomProps> = ({ initialData }) => {
       router.push(`/${params.storeId}/sizes`);
       toast.success(toastMessage);
     } catch (error) {
+      console.error("Failed to submit the form:", error);
       toast.error("Something went wrong.");
     } finally {
       setLoading(false);
@@ -85,6 +85,7 @@ export const SizeForm: React.FC<SizeFomProps> = ({ initialData }) => {
       router.push(`/${params.storeId}/sizes`);
       toast.success("size deleted.");
     } catch (error) {
+      console.error("Failed to delete the size:", error);
       toast.error("Make sure to remove all products using this Size first.");
     } finally {
       setLoading(false);

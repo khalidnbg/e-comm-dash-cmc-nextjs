@@ -45,6 +45,7 @@ export const StoreModal = () => {
 
       window.location.assign(`${response.data.id}`); // app/dashboard/[storeId]/(routes)/page
     } catch (error) {
+      console.error("Failed to submit the form:", error);
       toast.error("Something went wrong.");
       setLoading(false);
     }

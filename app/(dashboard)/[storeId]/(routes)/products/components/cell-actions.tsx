@@ -40,6 +40,7 @@ export const CellActions: React.FC<CellInterfaceProps> = ({ data }) => {
       router.refresh();
       toast.success("Product deleted.");
     } catch (error) {
+      console.error("Failed to delete the product:", error);
       toast.error("Something went wrong.");
     } finally {
       setLoading(false);

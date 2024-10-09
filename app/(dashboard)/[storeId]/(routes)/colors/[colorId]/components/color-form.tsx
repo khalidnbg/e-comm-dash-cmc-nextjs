@@ -72,6 +72,7 @@ export const ColorForm: React.FC<ColorFomProps> = ({ initialData }) => {
       router.push(`/${params.storeId}/colors`);
       toast.success(toastMessage);
     } catch (error) {
+      console.error("Failed to submit the form:", error);
       toast.error("Something went wrong.");
     } finally {
       setLoading(false);
@@ -86,6 +87,7 @@ export const ColorForm: React.FC<ColorFomProps> = ({ initialData }) => {
       router.push(`/${params.storeId}/colors`);
       toast.success("Color deleted.");
     } catch (error) {
+      console.error("Failed to delete the color:", error);
       toast.error("Make sure to remove all products using this color first.");
     } finally {
       setLoading(false);
